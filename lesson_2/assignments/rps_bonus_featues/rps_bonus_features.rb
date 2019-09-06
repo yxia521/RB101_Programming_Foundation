@@ -7,7 +7,7 @@
     'rock': ['scissors', 'lizard'],
     'paper': ['rock', 'spock'],
     'scissors': ['paper', 'lizard'],
-    'lizard': ['paper', 'rock'],
+    'lizard': ['paper', 'spock'],
     'spock': ['rock', 'scissors']
   }
 
@@ -52,15 +52,58 @@
     end
   end
 
-  def display_scores(your_scores, computer_scores)
-    prompt("Your score is #{your_scores}. Computer's score is #{computer_scores}. \n\n")
+  def display_scores(scores)
+    prompt("Your score is #{scores[:player]}.
+   Computer's score is #{scores[:computer]}. \n\n")
   end
 
-  def grand_winner?(your_scores, computer_scores)
-    if your_scores == WIN_POINTS && computer_scores != WIN_POINTS
+  def update_scores(your_choice, computer_choice, scores)
+    if win?(your_choice, computer_choice)
+      scores[:player] += 1
+      display_scores(scores)
+    elsif win?(computer_choice, your_choice)
+      scores[:computer] += 1
+      display_scores(scores)
+    end
+  end
+
+  def grand_winner?(scores)
+    if scores[:player] == WIN_POINTS
       prompt(messages('you_grand_winner'))
-    elsif computer_scores == WIN_POINTS && your_scores != WIN_POINTS
+    elsif scores[:computer] == WIN_POINTS
       prompt(messages('computer_grand_winner'))
+    end
+  end
+
+  def game_over(scores)
+    scores[:player] == WIN_POINTS || scores[:computer] == WIN_POINTS
+  end
+
+  def valid_answer(answer)
+    %w(y yes n no).include?(answer)
+  end
+
+  def play_again
+    prompt(messages('play_again'))
+    loop do
+      answer = gets.chomp
+      return answer if valid_answer(answer)
+      prompt(messages('invalid_answer'))
+    end
+  end
+
+  def new_round(answer)
+    %w(y yes).include?(answer)
+  end
+
+  def whole_process(your_choice, computer_choice, scores)
+    if VALID_CHOICE.include?(your_choice)
+      clear
+      prompt("You chose #{your_choice}, computer chose #{computer_choice}!\n\n")
+      display_result(your_choice, computer_choice)
+      update_scores(your_choice, computer_choice, scores)
+    else
+      prompt(messages('invalid_choice'))
     end
   end
 
@@ -73,39 +116,21 @@
   # main loop
   loop do
     your_choice = ''
-    your_scores = 0
-    computer_scores = 0
+    scores = { player: 0, computer: 0 }
+    computer_choice = VALID_CHOICE.sample
     loop do
       prompt(messages('choose_move'))
       prompt(messages('valid_choice'))
       input = gets.chomp
-
       your_choice = convert_letter(input)
-      computer_choice = VALID_CHOICE.sample
-
-      if VALID_CHOICE.include?(your_choice)
-        clear
-        prompt("You chose #{your_choice}, computer chose #{computer_choice}! \n\n")
-        display_result(your_choice, computer_choice)
-
-        if win?(your_choice, computer_choice)
-          your_scores += 1
-          display_scores(your_scores, computer_scores)
-        elsif win?(computer_choice, your_choice)
-          computer_scores += 1
-          display_scores(your_scores, computer_scores)
-        end
-        break if your_scores == WIN_POINTS || computer_scores == WIN_POINTS
-      else
-        prompt(messages('invalid_choice'))
-      end
+      whole_process(your_choice, computer_choice, scores)
+      break if game_over(scores)
     end
+    grand_winner?(scores)
 
-    grand_winner?(your_scores, computer_scores)
-    prompt(messages('play_again'))
-    answer = gets.chomp
+    another_round = play_again
     clear
-    break unless answer.downcase.start_with?('y')
+    break unless new_round(another_round)
   end
 
   prompt(messages('end'))
