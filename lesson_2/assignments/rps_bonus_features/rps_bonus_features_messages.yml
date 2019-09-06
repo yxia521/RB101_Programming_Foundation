@@ -1,0 +1,17 @@
+  welcome: "Welcome to the Rock Paper Scissors game!"
+  separator: "----------------------------------------"
+  instruction: "Instruction: \n
+  To play this game with the computer, you choose one move, and then we will tell you who wins for each round!\n 
+  The winner gets one point each round, whoever reaches five points first is the grand winner!"
+  
+  choose_move: "Please choose one move: \n"
+  valid_choice: "'r' for rock \n   'p' for paper \n   'l' for lizard \n   's' for scissors \n   'k' for spock"
+  invalid_choice: "That's not a valid choice.\n\n"
+  tie: "It's a tie! No one gets point.\n \n"
+  you_won: "You won! \n\n"
+  computer_won: "Computer won! \n\n"
+  you_grand_winner: "Congratulaion! You are the grand winner!"
+  computer_grand_winner: "Sorry, you lose the game. Computer is the grand winner."
+  play_again: "Do you want to play this game again? ('y' for YES, 'n' for NO)"
+  invalid_answer: "That's not a valid answer."
+  end: "Thank you for playing with us! See you next time."
