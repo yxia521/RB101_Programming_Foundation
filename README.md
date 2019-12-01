@@ -1,4 +1,4 @@
-#README
+# README
 
 This repository contains all of my personal learning materials for the [Launch School](https://launchschool.com/course_catalog) Backend RB101 - Programming Foundations course:
 
