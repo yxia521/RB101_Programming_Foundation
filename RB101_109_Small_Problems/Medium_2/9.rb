@@ -9,6 +9,8 @@
 # This process is repeated until a complete pass is made without performing any 
 # swaps; at that point, the Array is completely sorted.
 
+# --- ls sol ---
+
 def bubble_sort!(array)
   loop do
     swapped = false
@@ -21,6 +23,27 @@ def bubble_sort!(array)
     break unless swapped
   end
   nil
+end
+
+# --- my 2nd try ---
+
+# iterate thru the array, each with index
+#   compare the index, with index + 1, if index > index + 1, switch
+#   break if index + 1 > array.size - 1
+# end
+# repeat this process until we get the same result as we call sort
+# return array
+
+def bubble_sort!(array)
+  ascending_order = array.sort
+  loop do
+    array.each_with_index do |i, index|
+      array[index], array[index+1] = array[index+1], array[index] if array[index] > array[index+1]
+      break if index + 1 == array.size-1
+    end
+    break if array == ascending_order
+  end
+  p array
 end
 
 array = [5, 3]
